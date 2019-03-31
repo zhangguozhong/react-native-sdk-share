@@ -1,17 +1,8 @@
-//
-//  WXApiManager.m
-//  SDKSample
-//
-//  Created by Jeason on 16/07/2015.
-//
-//
 
 #import "WXApiManager.h"
 
 @interface WXApiManager ()
-
 @property (nonatomic, copy) onRespFunction respFunction;
-
 @end
 
 @implementation WXApiManager
@@ -38,7 +29,7 @@
         NSMutableDictionary *body = @{@"errCode":@(r.errCode)}.mutableCopy;
         body[@"errStr"] = r.errStr;
         body[@"lang"] = r.lang;
-        body[@"country"] =r.country;
+        body[@"country"] = r.country;
         body[@"type"] = @"SendMessageToWX.Resp";
         
         if (self.respFunction) {
