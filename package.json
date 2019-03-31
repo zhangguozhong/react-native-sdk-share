@@ -1,17 +1,27 @@
 
 {
-  "name": "react-native-share",
+  "name": "react-native-sdk-share",
   "version": "1.0.0",
-  "description": "",
+  "description": "封装好的react-native微信分享组件工具类，同时支持ios与android。",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "share",
+    "wechat"
   ],
-  "author": "",
-  "license": "",
+  "author": "zhangguozhong",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangguozhong/react-native-sdk-share.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zhangguozhong/react-native-sdk-share/issues"
+  },
+  "homepage": "https://github.com/zhangguozhong/react-native-sdk-share#readme",
   "peerDependencies": {
     "react-native": "^0.41.2"
   }
