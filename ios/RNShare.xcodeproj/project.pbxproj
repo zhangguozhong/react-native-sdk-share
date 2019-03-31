@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		77DCDAFC2250D2600025E98C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77DCDAFA2250D25F0025E98C /* libWeChatSDK.a */; };
+		77DCDB042250D4A30025E98C /* WXApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DCDAFE2250D4A20025E98C /* WXApiManager.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNShare.m */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +26,12 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNShare.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		77DCDAF82250D25F0025E98C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		77DCDAF92250D25F0025E98C /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
+		77DCDAFA2250D25F0025E98C /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		77DCDAFB2250D25F0025E98C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		77DCDAFE2250D4A20025E98C /* WXApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiManager.m; sourceTree = "<group>"; };
+		77DCDB002250D4A30025E98C /* WXApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiManager.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNShare.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNShare.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77DCDAFC2250D2600025E98C /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,10 +59,32 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				77DCDAFD2250D44E0025E98C /* Control */,
+				77DCDAF72250D2500025E98C /* WeChatSDK */,
 				B3E7B5881CC2AC0600A0062D /* RNShare.h */,
 				B3E7B5891CC2AC0600A0062D /* RNShare.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		77DCDAF72250D2500025E98C /* WeChatSDK */ = {
+			isa = PBXGroup;
+			children = (
+				77DCDAFA2250D25F0025E98C /* libWeChatSDK.a */,
+				77DCDAF92250D25F0025E98C /* WechatAuthSDK.h */,
+				77DCDAFB2250D25F0025E98C /* WXApi.h */,
+				77DCDAF82250D25F0025E98C /* WXApiObject.h */,
+			);
+			path = WeChatSDK;
+			sourceTree = "<group>";
+		};
+		77DCDAFD2250D44E0025E98C /* Control */ = {
+			isa = PBXGroup;
+			children = (
+				77DCDB002250D4A30025E98C /* WXApiManager.h */,
+				77DCDAFE2250D4A20025E98C /* WXApiManager.m */,
+			);
+			path = Control;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -113,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */,
+				77DCDB042250D4A30025E98C /* WXApiManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,12 +236,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-				"$(inherited)",
+					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/WeChatSDK",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RNShare;
 				SKIP_INSTALL = YES;
@@ -225,7 +260,10 @@
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/WeChatSDK",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RNShare;
 				SKIP_INSTALL = YES;
