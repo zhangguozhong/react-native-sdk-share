@@ -1,4 +1,3 @@
-
 package com.library.share;
 
 import android.content.Context;
@@ -24,6 +23,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
@@ -34,7 +34,6 @@ import com.tencent.mm.opensdk.modelmsg.WXMusicObject;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.opensdk.modelpay.PayResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -44,7 +43,6 @@ import java.util.UUID;
 public class RNShareModule extends ReactContextBaseJavaModule implements IWXAPIEventHandler {
     private final ReactApplicationContext reactContext;
     private IWXAPI api = null;
-    private Callback respCallback = null;
 
     private final static String NOT_REGISTERED = "registerApp required.";
     private final static String INVALID_ARGUMENT = "invalid argument.";
@@ -266,8 +264,6 @@ public class RNShareModule extends ReactContextBaseJavaModule implements IWXAPIE
         req.message = message;
         req.scene = scene;
         req.transaction = UUID.randomUUID().toString();
-
-        this.respCallback = callback;
         callback.invoke(null, api.sendReq(req));
     }
 
@@ -384,17 +380,12 @@ public class RNShareModule extends ReactContextBaseJavaModule implements IWXAPIE
         if (baseResp instanceof SendMessageToWX.Resp) {
             SendMessageToWX.Resp resp = (SendMessageToWX.Resp) (baseResp);
             map.putString("type", "SendMessageToWX.Resp");
-        } else if (baseResp instanceof PayResp) {
-            PayResp resp = (PayResp) (baseResp);
-            map.putString("type", "PayReq.Resp");
-            map.putString("returnKey", resp.returnKey);
         }
 
-        if (this.respCallback != null) {
-            this.respCallback.invoke(map);
-        }
+        this.getReactApplicationContext()
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("WeChat_Resp", map);
     }
-
 
     private interface ImageCallback {
         void invoke(@Nullable Bitmap bitmap);

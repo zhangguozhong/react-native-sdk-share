@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		77DCDAFC2250D2600025E98C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77DCDAFA2250D25F0025E98C /* libWeChatSDK.a */; };
-		77DCDB042250D4A30025E98C /* WXApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DCDAFE2250D4A20025E98C /* WXApiManager.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNShare.m */; };
 /* End PBXBuildFile section */
 
@@ -30,8 +29,6 @@
 		77DCDAF92250D25F0025E98C /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
 		77DCDAFA2250D25F0025E98C /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		77DCDAFB2250D25F0025E98C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
-		77DCDAFE2250D4A20025E98C /* WXApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiManager.m; sourceTree = "<group>"; };
-		77DCDB002250D4A30025E98C /* WXApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiManager.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNShare.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNShare.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,7 +56,6 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				77DCDAFD2250D44E0025E98C /* Control */,
 				77DCDAF72250D2500025E98C /* WeChatSDK */,
 				B3E7B5881CC2AC0600A0062D /* RNShare.h */,
 				B3E7B5891CC2AC0600A0062D /* RNShare.m */,
@@ -76,15 +72,6 @@
 				77DCDAF82250D25F0025E98C /* WXApiObject.h */,
 			);
 			path = WeChatSDK;
-			sourceTree = "<group>";
-		};
-		77DCDAFD2250D44E0025E98C /* Control */ = {
-			isa = PBXGroup;
-			children = (
-				77DCDB002250D4A30025E98C /* WXApiManager.h */,
-				77DCDAFE2250D4A20025E98C /* WXApiManager.m */,
-			);
-			path = Control;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +113,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 58B511D21A9E6C8500147676;
@@ -144,7 +132,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */,
-				77DCDB042250D4A30025E98C /* WXApiManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

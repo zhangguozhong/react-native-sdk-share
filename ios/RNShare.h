@@ -1,10 +1,8 @@
 
-#if __has_include(<React/RCTBridgeModule.h>)
 #import <React/RCTBridgeModule.h>
-#else
-#import "RCTBridgeModule.h"
-#endif
 #import <UIKit/UIKit.h>
+#import <React/RCTEventEmitter.h>
+#import "WXApi.h"
 
 #define RCTWXShareTypeNews @"news"
 #define RCTWXShareTypeThumbImageUrl @"thumbImage"
@@ -22,8 +20,9 @@
 #define RCTWXShareWebPageUrl @"webPageUrl"
 #define RCTWXShareImageUrl @"imageUrl"
 
+#define RCTWXEventName @"WeChat_Resp"
 
-@interface RNShare : NSObject <RCTBridgeModule>
+@interface RNShare : RCTEventEmitter <RCTBridgeModule,WXApiDelegate>
 
 + (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)aURL;
 

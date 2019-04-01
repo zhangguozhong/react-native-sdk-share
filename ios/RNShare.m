@@ -1,7 +1,5 @@
 
 #import "RNShare.h"
-#import "WXApi.h"
-#import "WXApiManager.h"
 #import <React/RCTImageLoader.h>
 
 @implementation RNShare
@@ -12,9 +10,21 @@
 }
 RCT_EXPORT_MODULE()
 
-+ (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)aURL
-{
-    return [WXApi handleOpenURL:aURL delegate:[WXApiManager sharedManager]];
++ (instancetype)sharedInstance {
+    static dispatch_once_t onceToken;
+    static RNShare *instance;
+    dispatch_once(&onceToken, ^{
+        instance = [[RNShare alloc] init];
+    });
+    return instance;
+}
+
+- (NSArray *)supportedEvents {
+    return @[@"WeChat_Resp"];
+}
+
++ (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)aURL {
+    return [WXApi handleOpenURL:aURL delegate:[RNShare sharedInstance]];
 }
 
 RCT_EXPORT_METHOD(isWXAppInstalled:(RCTResponseSenderBlock)callback) {
@@ -157,7 +167,6 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
     }
 }
 
-
 - (void)shareToWeixinWithData:(NSDictionary *)aData scene:(int)aScene callback:(RCTResponseSenderBlock)aCallBack {
     NSString *imageUrl = aData[RCTWXShareTypeThumbImageUrl];
     if (imageUrl.length && _bridge.imageLoader) {
@@ -179,9 +188,6 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
     req.scene = aScene;
     req.text = text;
     
-    [[WXApiManager sharedManager] setRespFunction:^(NSArray *resultDict) {
-        callback(resultDict);
-    }];
     [WXApi sendReq:req];
 }
 
@@ -208,10 +214,28 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
     req.scene = aScene;
     req.message = message;
     
-    [[WXApiManager sharedManager] setRespFunction:^(NSArray *resultDict) {
-        callback(resultDict);
-    }];
     [WXApi sendReq:req];
+}
+
+#pragma mark - wx WXApiDelegate
+-(void) onReq:(BaseReq*)req {
+    // TODO(Yorkie)
+}
+
+- (void)onResp:(BaseResp *)resp {
+    if ([resp isKindOfClass:[SendMessageToWXResp class]]) {
+        SendMessageToWXResp *r = (SendMessageToWXResp *)resp;
+        
+        NSMutableDictionary *body = @{@"errCode":@(r.errCode)}.mutableCopy;
+        body[@"errStr"] = r.errStr;
+        body[@"lang"] = r.lang;
+        body[@"country"] = r.country;
+        body[@"type"] = @"SendMessageToWX.Resp";
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self sendEventWithName:RCTWXEventName body:body];
+        });
+    }
 }
 
 @end
