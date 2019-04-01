@@ -36,7 +36,7 @@ export function shareToSession(data,successCallback,failCallback) {
 
 function addListenerWithEventName(eventName,successCallback,failCallback) {
     if (Platform.OS === 'ios') {
-        NativeShareEmitter.addListener(eventName, (value) => {
+       this.subscription = NativeShareEmitter.addListener(eventName, (value) => {
             if (value.errCode === 0) {
                 excuteCallback(successCallback,value);
             } else {
@@ -44,7 +44,7 @@ function addListenerWithEventName(eventName,successCallback,failCallback) {
             }
         });
     }else {
-        DeviceEventEmitter.addListener(eventName, (value) => {
+        this.subscription = DeviceEventEmitter.addListener(eventName, (value) => {
             if (value.errCode === 0) {
                 excuteCallback(successCallback,value);
             } else {
@@ -53,5 +53,7 @@ function addListenerWithEventName(eventName,successCallback,failCallback) {
         });
     }
 }
+
+export function removeListener() { this.subscription && this.subscription.remove(); }
 
 function excuteCallback(callback,value) { callback && callback(value); }
