@@ -1,6 +1,7 @@
 package com.library.share;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -38,6 +39,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class RNShareModule extends ReactContextBaseJavaModule implements IWXAPIEventHandler {
@@ -59,6 +61,29 @@ public class RNShareModule extends ReactContextBaseJavaModule implements IWXAPIE
 
     public boolean canOverrideExistingModule() {
         return true;
+    }
+
+    private static ArrayList<RNShareModule> modules = new ArrayList<>();
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        modules.add(this);
+    }
+
+    @Override
+    public void onCatalystInstanceDestroy() {
+        super.onCatalystInstanceDestroy();
+        if (api != null) {
+            api = null;
+        }
+        modules.remove(this);
+    }
+
+    public static void handleIntent(Intent intent) {
+        for (RNShareModule mod : modules) {
+            mod.api.handleIntent(intent, mod);
+        }
     }
 
 
