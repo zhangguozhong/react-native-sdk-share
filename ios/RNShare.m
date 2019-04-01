@@ -40,16 +40,12 @@ RCT_EXPORT_METHOD(registerApp:(NSString *)registerAppID) {
 }
 
 
-/**
- 分享到朋友圈
- */
+/**分享到朋友圈*/
 RCT_EXPORT_METHOD(shareToTimeline:(NSDictionary *)data callback:(RCTResponseSenderBlock)callback) {
     [self shareToWeixinWithData:data scene:WXSceneTimeline callback:callback];
 }
 
-/**
- 分享到好友
- */
+/**分享到好友*/
 RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSenderBlock)callback) {
     [self shareToWeixinWithData:data scene:WXSceneSession callback:callback];
 }
@@ -125,7 +121,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
             NSURL *url = [NSURL URLWithString:aData[RCTWXShareImageUrl]];
             NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
             [self.bridge.imageLoader loadImageWithURLRequest:imageRequest callback:^(NSError *error, UIImage *image) {
-                if (!image){
+                if (!image) {
                     callback(@[@"fail to load image resource"]);
                 } else {
                     WXImageObject *imageObject = [WXImageObject object];
@@ -172,7 +168,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
     if (imageUrl.length && _bridge.imageLoader) {
         NSURL *url = [NSURL URLWithString:imageUrl];
         NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
-        [_bridge.imageLoader loadImageWithURLRequest:imageRequest size:CGSizeMake(100, 100) scale:1 clipped:FALSE resizeMode:RCTResizeModeStretch progressBlock:nil partialLoadBlock:nil
+        [_bridge.imageLoader loadImageWithURLRequest:imageRequest size:CGSizeMake(100, 100) scale:1 clipped:NO resizeMode:RCTResizeModeStretch progressBlock:nil partialLoadBlock:nil
                                      completionBlock:^(NSError *error, UIImage *image) {
                                          [self shareToWeixinWithData:aData thumbImage:image scene:aScene callBack:aCallBack];
                                      }];
