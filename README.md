@@ -34,12 +34,39 @@
       compile project(':react-native-sdk-share')
   	```
 
+## 配置（请参考微信开放平台文档）
 
 ## Usage
 ```javascript
-import RNShare from 'react-native-sdk-share';
 
-// TODO: What to do with the module?
-RNShare;
+//UtilsShare
+import { shareToSession,shareToTimeline,registerApp } from 'react-native-sdk-share';
+
+const weiXinSceneType = { session:1,timeLine:2 }; //session=1微信好友，timeLine=2微信朋友圈
+const defaultCallback = (error,result) => { console.log(error,result); }; //默认回调方法
+const UtilsShare = {
+
+    registerApp:function (registerAppID) {
+        registerApp(registerAppID);
+    },
+    shareDataToWeiXin:function (sceneType,data,successCallback,failCallback) {
+        if (sceneType === weiXinSceneType.timeLine) {
+            shareToTimeline(data,defaultCallback,successCallback,failCallback);
+        }else if (sceneType === weiXinSceneType.session) {
+            shareToSession(data,defaultCallback,successCallback,failCallback);
+        }
+    }
+};
+export default UtilsShare;
+export { weiXinSceneType }
+
+//to do
+UtilsShare.registerApp('xxx'); //注册app
+UtilsShare.shareDataToWeiXin(weiXinSceneType.session,{ type:'text',text:'测试',description:'测试消息' },(data) => {
+    console.log('成功回调',data);
+},(error) => {
+    console.log('错误回调',error);
+});
+
 ```
   
