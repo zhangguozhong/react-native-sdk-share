@@ -2,8 +2,8 @@ import { DeviceEventEmitter,NativeModules,Platform,NativeEventEmitter } from 're
 const { RNShare } = NativeModules;
 const NativeShareEmitter = new NativeEventEmitter(RNShare);
 
-export function registerApp(registerAppID,callback) {
-    RNShare.registerApp(registerAppID,callback);
+export function registerApp(registerAppID) {
+    RNShare.registerApp(registerAppID);
 }
 
 export function isWXAppInstalled(callback) {
@@ -12,24 +12,24 @@ export function isWXAppInstalled(callback) {
 
 export function shareToTimeline(data,successCallback,failCallback) {
 
-    isWXAppInstalled((isInstalled) => {
+    isWXAppInstalled((code,isInstalled) => {
         if (isInstalled) {
-            RNShare.shareToTimeline(data);
+            RNShare.shareToTimeline(data,successCallback);
             addListenerWithEventName('WeChat_Resp',successCallback,failCallback);
         }else {
-            excuteCallback(failCallback,'微信未安装');
+            excuteCallback(failCallback,'微信未安装，请先安装');
         }
     });
 }
 
 export function shareToSession(data,successCallback,failCallback) {
 
-    isWXAppInstalled((isInstalled) => {
+    isWXAppInstalled((code,isInstalled) => {
         if (isInstalled) {
-            RNShare.shareToSession(data, callback);
+            RNShare.shareToSession(data, successCallback);
             addListenerWithEventName('WeChat_Resp',successCallback,failCallback);
         }else {
-            excuteCallback(failCallback,'微信未安装');
+            excuteCallback(failCallback,'微信未安装，请先安装');
         }
     });
 }

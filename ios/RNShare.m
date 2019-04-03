@@ -3,7 +3,6 @@
 #import <React/RCTImageLoader.h>
 
 @implementation RNShare
-@synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
@@ -17,6 +16,15 @@ RCT_EXPORT_MODULE()
         instance = [[RNShare alloc] init];
     });
     return instance;
+}
+
++(id)allocWithZone:(NSZone *)zone {
+    static RNShare *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [super allocWithZone:zone];
+    });
+    return sharedInstance;
 }
 
 - (NSArray *)supportedEvents {
@@ -165,10 +173,10 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
 
 - (void)shareToWeixinWithData:(NSDictionary *)aData scene:(int)aScene callback:(RCTResponseSenderBlock)aCallBack {
     NSString *imageUrl = aData[RCTWXShareTypeThumbImageUrl];
-    if (imageUrl.length && _bridge.imageLoader) {
+    if (imageUrl.length && self.bridge.imageLoader) {
         NSURL *url = [NSURL URLWithString:imageUrl];
         NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
-        [_bridge.imageLoader loadImageWithURLRequest:imageRequest size:CGSizeMake(100, 100) scale:1 clipped:NO resizeMode:RCTResizeModeStretch progressBlock:nil partialLoadBlock:nil
+        [self.bridge.imageLoader loadImageWithURLRequest:imageRequest size:CGSizeMake(100, 100) scale:1 clipped:NO resizeMode:RCTResizeModeStretch progressBlock:nil partialLoadBlock:nil
                                      completionBlock:^(NSError *error, UIImage *image) {
                                          [self shareToWeixinWithData:aData thumbImage:image scene:aScene callBack:aCallBack];
                                      }];
