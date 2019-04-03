@@ -88,9 +88,9 @@ public class RNShareModule extends ReactContextBaseJavaModule implements IWXAPIE
 
 
     @ReactMethod
-    public void registerApp(String registerAppID, Callback callback) {
+    public void registerApp(String registerAppID) {
         api = WXAPIFactory.createWXAPI(this.getReactApplicationContext().getBaseContext(), registerAppID, true);
-        callback.invoke(null, api.registerApp(registerAppID));
+        api.registerApp(registerAppID);
     }
 
     @ReactMethod

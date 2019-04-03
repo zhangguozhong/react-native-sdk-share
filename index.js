@@ -10,11 +10,11 @@ export function isWXAppInstalled(callback) {
     RNShare.isWXAppInstalled(callback);
 }
 
-export function shareToTimeline(data,successCallback,failCallback) {
+export function shareToTimeline(data,defaultCallback,successCallback,failCallback) {
 
     isWXAppInstalled((code,isInstalled) => {
         if (isInstalled) {
-            RNShare.shareToTimeline(data,successCallback);
+            RNShare.shareToTimeline(data,defaultCallback);
             addListenerWithEventName('WeChat_Resp',successCallback,failCallback);
         }else {
             excuteCallback(failCallback,'微信未安装，请先安装');
@@ -22,11 +22,11 @@ export function shareToTimeline(data,successCallback,failCallback) {
     });
 }
 
-export function shareToSession(data,successCallback,failCallback) {
+export function shareToSession(data,defaultCallback,successCallback,failCallback) {
 
     isWXAppInstalled((code,isInstalled) => {
         if (isInstalled) {
-            RNShare.shareToSession(data, successCallback);
+            RNShare.shareToSession(data, defaultCallback);
             addListenerWithEventName('WeChat_Resp',successCallback,failCallback);
         }else {
             excuteCallback(failCallback,'微信未安装，请先安装');
