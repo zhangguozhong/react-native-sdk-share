@@ -36,11 +36,10 @@
 
 ## 配置（请参考微信开放平台文档）
 
-## Usage
+## Demo
 ```javascript
 
-//UtilsShare
-import { shareToSession,shareToTimeline,registerApp } from 'react-native-sdk-share';
+import { shareToSession,shareToTimeline,registerApp,registerIosWxApp } from 'react-native-sdk-share';
 
 const weiXinSceneType = { session:1,timeLine:2 }; //session=1微信好友，timeLine=2微信朋友圈
 const defaultCallback = (error,result) => { console.log(error,result); }; //默认回调方法
@@ -60,7 +59,6 @@ const UtilsShare = {
 export default UtilsShare;
 export { weiXinSceneType }
 
-//to do
 UtilsShare.registerApp('xxx'); //注册app
 UtilsShare.shareDataToWeiXin(weiXinSceneType.session,{ type:'text',text:'测试',description:'测试消息' },(data) => {
     console.log('成功回调',data);
