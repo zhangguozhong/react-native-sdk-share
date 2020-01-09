@@ -67,4 +67,9 @@ UtilsShare.shareDataToWeiXin(weiXinSceneType.session,{ type:'text',text:'测试'
 });
 
 ```
-  
+
+## 说明
+
+微信开放平台注册安卓平台使用registerApp，iOS使用registerIosWxApp。
+
+export default UtilsShare;
