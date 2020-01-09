@@ -1,4 +1,3 @@
-
 #import "RNShare.h"
 #import <React/RCTImageLoader.h>
 
@@ -7,24 +6,18 @@
 - (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
 }
+
 RCT_EXPORT_MODULE()
 
 + (instancetype)sharedInstance {
     static dispatch_once_t onceToken;
-    static RNShare *instance;
+    static RNShare *_instance;
+    
     dispatch_once(&onceToken, ^{
-        instance = [[RNShare alloc] init];
+        _instance = [[RNShare alloc] init];
     });
-    return instance;
-}
-
-+(id)allocWithZone:(NSZone *)zone {
-    static RNShare *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [super allocWithZone:zone];
-    });
-    return sharedInstance;
+    
+    return _instance;
 }
 
 - (NSArray *)supportedEvents {
@@ -32,7 +25,13 @@ RCT_EXPORT_MODULE()
 }
 
 + (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)aURL {
+    
     return [WXApi handleOpenURL:aURL delegate:[RNShare sharedInstance]];
+}
+
++ (BOOL)handleOpenUniversalLink:(NSUserActivity *)userActivity {
+    
+    return [WXApi handleOpenUniversalLink:userActivity delegate:[RNShare sharedInstance]];
 }
 
 RCT_EXPORT_METHOD(isWXAppInstalled:(RCTResponseSenderBlock)callback) {
@@ -40,20 +39,24 @@ RCT_EXPORT_METHOD(isWXAppInstalled:(RCTResponseSenderBlock)callback) {
 }
 
 RCT_EXPORT_METHOD(registerApp:(NSString *)registerAppID) {
-    [WXApi registerApp:registerAppID enableMTA:YES];
-    //向微信注册支持的文件类型
-    UInt64 typeFlag = MMAPP_SUPPORT_TEXT | MMAPP_SUPPORT_PICTURE | MMAPP_SUPPORT_LOCATION | MMAPP_SUPPORT_VIDEO |MMAPP_SUPPORT_AUDIO | MMAPP_SUPPORT_WEBPAGE | MMAPP_SUPPORT_DOC | MMAPP_SUPPORT_DOCX | MMAPP_SUPPORT_PPT | MMAPP_SUPPORT_PPTX | MMAPP_SUPPORT_XLS | MMAPP_SUPPORT_XLSX | MMAPP_SUPPORT_PDF;
-    
-    [WXApi registerAppSupportContentFlag:typeFlag];
+    [self registerWxApp:registerAppID withUniversalLink:@""];
 }
 
+RCT_EXPORT_METHOD(registerApp:(NSString *)registerAppID universalLink:(NSString *)universalLink) {
+    [self registerWxApp:registerAppID withUniversalLink:universalLink];
+}
 
-/**分享到朋友圈*/
+- (void)registerWxApp:(NSString *)registerAppID withUniversalLink:(NSString *)universalLink {
+    
+    [WXApi registerApp:registerAppID universalLink:universalLink];
+}
+
+//分享到朋友圈
 RCT_EXPORT_METHOD(shareToTimeline:(NSDictionary *)data callback:(RCTResponseSenderBlock)callback) {
     [self shareToWeixinWithData:data scene:WXSceneTimeline callback:callback];
 }
 
-/**分享到好友*/
+//分享到好友
 RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSenderBlock)callback) {
     [self shareToWeixinWithData:data scene:WXSceneSession callback:callback];
 }
@@ -64,7 +67,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
     if ([type isEqualToString:RCTWXShareTypeText]) {
         NSString *text = aData[RCTWXShareDescription];
         [self shareToWeixinWithTextMessage:aScene Text:text callBack:callback];
-    } else {
+    }else {
         NSString * title = aData[RCTWXShareTitle];
         NSString * description = aData[RCTWXShareDescription];
         NSString * mediaTagName = aData[@"mediaTagName"];
@@ -91,7 +94,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
                                        MediaTag:mediaTagName
                                        callBack:callback];
             
-        } else if ([type isEqualToString:RCTWXShareTypeAudio]) {
+        }else if ([type isEqualToString:RCTWXShareTypeAudio]) {
             WXMusicObject *musicObject = [WXMusicObject new];
             musicObject.musicUrl = aData[@"musicUrl"];
             musicObject.musicLowBandUrl = aData[@"musicLowBandUrl"];
@@ -108,7 +111,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
                                        MediaTag:mediaTagName
                                        callBack:callback];
             
-        } else if ([type isEqualToString:RCTWXShareTypeVideo]) {
+        }else if ([type isEqualToString:RCTWXShareTypeVideo]) {
             WXVideoObject *videoObject = [WXVideoObject new];
             videoObject.videoUrl = aData[@"videoUrl"];
             videoObject.videoLowBandUrl = aData[@"videoLowBandUrl"];
@@ -123,7 +126,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
                                        MediaTag:mediaTagName
                                        callBack:callback];
             
-        } else if ([type isEqualToString:RCTWXShareTypeImageUrl] ||
+        }else if ([type isEqualToString:RCTWXShareTypeImageUrl] ||
                    [type isEqualToString:RCTWXShareTypeImageFile] ||
                    [type isEqualToString:RCTWXShareTypeImageResource]) {
             NSURL *url = [NSURL URLWithString:aData[RCTWXShareImageUrl]];
@@ -147,7 +150,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
                     
                 }
             }];
-        } else if ([type isEqualToString:RCTWXShareTypeFile]) {
+        }else if ([type isEqualToString:RCTWXShareTypeFile]) {
             NSString * filePath = aData[@"filePath"];
             NSString * fileExtension = aData[@"fileExtension"];
             
@@ -180,7 +183,7 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
                                      completionBlock:^(NSError *error, UIImage *image) {
                                          [self shareToWeixinWithData:aData thumbImage:image scene:aScene callBack:aCallBack];
                                      }];
-    } else {
+    }else {
         [self shareToWeixinWithData:aData thumbImage:nil scene:aScene callBack:aCallBack];
     }
     
@@ -192,7 +195,9 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
     req.scene = aScene;
     req.text = text;
     
-    [WXApi sendReq:req];
+    [WXApi sendReq:req completion:^(BOOL success) {
+        
+    }];
 }
 
 - (void)shareToWeixinWithMediaMessage:(int)aScene
@@ -218,11 +223,13 @@ RCT_EXPORT_METHOD(shareToSession:(NSDictionary *)data callback:(RCTResponseSende
     req.scene = aScene;
     req.message = message;
     
-    [WXApi sendReq:req];
+    [WXApi sendReq:req completion:^(BOOL success) {
+
+    }];
 }
 
 #pragma mark - wx WXApiDelegate
--(void) onReq:(BaseReq*)req {
+-(void)onReq:(BaseReq*)req {
     // TODO(Yorkie)
 }
 

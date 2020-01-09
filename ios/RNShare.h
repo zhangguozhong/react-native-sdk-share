@@ -26,5 +26,7 @@
 
 + (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)aURL;
 
++ (BOOL)handleOpenUniversalLink:(NSUserActivity *)userActivity;
+
 @end
   
